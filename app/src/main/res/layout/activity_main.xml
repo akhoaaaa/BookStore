@@ -14,14 +14,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/tbTrangChu"
-                android:background="#1AFF00"
-                app:title="Trang Chủ"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize">
+                android:layout_height="?attr/actionBarSize"
+                android:background="#1AFF00"
+                app:title="Trang">
 
             </androidx.appcompat.widget.Toolbar>
+
             <ViewFlipper
                 android:id="@+id/vfTrangChu"
                 android:layout_width="match_parent"
