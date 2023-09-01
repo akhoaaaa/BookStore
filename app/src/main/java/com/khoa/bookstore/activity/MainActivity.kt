@@ -82,6 +82,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 1 -> {
                     val i1 = Intent(this,SachActivity::class.java)
+                    i1.putExtra("loai",1)
                     startActivity(i1)
                 }
                 2 -> {

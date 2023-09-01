@@ -4,7 +4,10 @@ import com.khoa.bookstore.model.DanhMucModel;
 import com.khoa.bookstore.model.SanPhamMoiModel;
 
 import io.reactivex.rxjava3.core.Observable;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 
 public interface ApiBookStore {
 
@@ -14,4 +17,11 @@ public interface ApiBookStore {
 
     @GET("getsanpham.php")
     Observable<SanPhamMoiModel> getSanPham();
+
+    @POST("chitietdanhmuc.php")
+    @FormUrlEncoded
+    Observable<SanPhamMoiModel> getSach(
+            @Field("page") int page,
+            @Field("loai") int loai
+    );
 }
