@@ -1,6 +1,8 @@
 package com.khoa.bookstore.model;
 
-public class SanPhamMoi {
+import java.io.Serializable;
+
+public class SanPhamMoi implements Serializable {
     int id;
     double giasp;
     String tensp;
