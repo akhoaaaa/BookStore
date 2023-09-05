@@ -101,6 +101,16 @@ class ChiTietActivity : AppCompatActivity() {
             }
             binding.badge.setText(totalItem.toString())
         }
+    }
 
+    override fun onResume() {
+        super.onResume()
+        if (Utils.listgiohang != null){
+            var totalItem = 0
+            for (i in 0 until Utils.listgiohang.size){
+                totalItem = totalItem + Utils.listgiohang.get(i).soluong
+            }
+            binding.badge.setText(totalItem.toString())
+        }
     }
 }

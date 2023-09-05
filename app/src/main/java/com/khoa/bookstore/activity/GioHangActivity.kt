@@ -41,6 +41,7 @@ class GioHangActivity : AppCompatActivity() {
         } else {
             gioHangAdapter = GioHangAdapter(applicationContext, Utils.listgiohang)
             binding.reGioHang.adapter = gioHangAdapter
+            binding.txtGioHangTrong.visibility = View.GONE
         }
         tinhTongTien()
     }
