@@ -13,7 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.khoa.appbanhang.Interface.ItemClickListener;
+import com.khoa.bookstore.Interface.ItemClickListener;
 import com.khoa.bookstore.R;
 import com.khoa.bookstore.activity.ChiTietActivity;
 import com.khoa.bookstore.model.SanPhamMoi;

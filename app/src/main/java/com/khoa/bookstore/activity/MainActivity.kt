@@ -50,10 +50,6 @@ class MainActivity : AppCompatActivity() {
         apiBook = RetrofitClient.getInstance(Utils.BASE_URL).create(ApiBookStore::class.java)
 
 
-
-
-
-
         binding.tbTrangChu.apply {
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
             setNavigationIcon(android.R.drawable.ic_menu_sort_by_size)
@@ -71,6 +67,28 @@ class MainActivity : AppCompatActivity() {
         }else{
             Toast.makeText(this,"Không có internet, vui lòng kết nối",Toast.LENGTH_SHORT).show()
         }
+        if(Utils.listgiohang == null){
+            Utils.listgiohang = mutableListOf()
+        }else{
+            var totalItem = 0
+            for (i in 0 until Utils.listgiohang.size){
+                totalItem = totalItem + Utils.listgiohang.get(i).soluong
+            }
+            binding.badge.setText(totalItem.toString())
+        }
+        binding.frameGioHang.setOnClickListener {
+            val i = Intent(this,GioHangActivity::class.java)
+            startActivity(i)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        var totalItem = 0
+        for (i in 0 until Utils.listgiohang.size){
+            totalItem = totalItem + Utils.listgiohang.get(i).soluong
+        }
+        binding.badge.setText(totalItem.toString())
     }
 
     private fun getDanhMuc() {
