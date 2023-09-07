@@ -15,6 +15,7 @@
         android:layout_width="120dp"
         android:src="@drawable/icon_new"
         android:layout_height="120dp"/>
+
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -30,21 +31,37 @@
             android:drawablePadding="5dp"
             android:hint="Email"/>
     </com.google.android.material.textfield.TextInputLayout>
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_height="wrap_content">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/txtPass"
-            android:layout_width="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_height="wrap_content"
-            android:drawableStart="@drawable/lock"
-            android:drawablePadding="5dp"
-            android:hint="Pass"/>
-    </com.google.android.material.textfield.TextInputLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/txtPass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:drawableStart="@drawable/lock"
+                android:drawablePadding="5dp"
+                android:hint="Pass"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:text="Quên mk?"
+            android:textColor="@color/purple_700" />
+    </LinearLayout>
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnDangNhap"
         android:layout_marginTop="15dp"

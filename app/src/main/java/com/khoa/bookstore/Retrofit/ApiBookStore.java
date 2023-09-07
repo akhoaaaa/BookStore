@@ -19,21 +19,28 @@ public interface ApiBookStore {
     @GET("getsanpham.php")
     Observable<SanPhamMoiModel> getSanPham();
 
+
     @POST("chitietdanhmuc.php")
     @FormUrlEncoded
     Observable<SanPhamMoiModel> getSach(
-            @Field("page") int page,
             @Field("loai") int loai
     );
 
     @POST("dangki.php")
     @FormUrlEncoded
     Observable<UserModel> dangki(
-            @Field("email") String page,
+            @Field("email") String email,
             @Field("pass") String pass,
             @Field("sdt") String sdt,
             @Field("username") String username
 
+    );
+
+    @POST("dangnhap.php")
+    @FormUrlEncoded
+    Observable<UserModel> dangnhap(
+            @Field("email") String email,
+            @Field("pass") String pass
     );
 
 }

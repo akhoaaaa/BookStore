@@ -5,20 +5,30 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import com.bumptech.glide.Glide
+import com.khoa.bookstore.Retrofit.ApiBookStore
+import com.khoa.bookstore.Retrofit.RetrofitClient
 import com.khoa.bookstore.Utils.Utils
 import com.khoa.bookstore.databinding.ActivityChiTietBinding
 import com.khoa.bookstore.model.GioHang
 import com.khoa.bookstore.model.SanPhamMoi
+import com.khoa.bookstore.model.User
+import com.khoa.bookstore.model.UserModel
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.schedulers.Schedulers
 import java.text.DecimalFormat
 
 class ChiTietActivity : AppCompatActivity() {
     private lateinit var binding: ActivityChiTietBinding
     private lateinit var sanPhamMoi:SanPhamMoi
+    private lateinit var apiBookStore: ApiBookStore
+    private val compositeDisposable = CompositeDisposable()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityChiTietBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        apiBookStore = RetrofitClient.getInstance(Utils.BASE_URL).create(ApiBookStore::class.java)
         binding.tbChiTiet.apply {
             title = "Chi tiết sản phẩm"
             setSupportActionBar(this)
@@ -34,7 +44,12 @@ class ChiTietActivity : AppCompatActivity() {
 
     private fun initControl() {
         binding.btnThemVaoGioHang.setOnClickListener {
-            themGioHang()
+            if (Utils.isUserLoggedIn == false){
+                val i = Intent(this,DangNhapActivity::class.java)
+                startActivity(i)
+            }else{
+                themGioHang()
+            }
         }
     }
 
@@ -76,7 +91,11 @@ class ChiTietActivity : AppCompatActivity() {
         for (i in 0 until Utils.listgiohang.size){
             totalItem = totalItem + Utils.listgiohang.get(i).soluong
         }
-        binding.badge.setText(totalItem.toString())
+        if (Utils.isUserLoggedIn == false){
+            binding.badge.setText("0")
+        }else{
+            binding.badge.setText(totalItem.toString())
+        }
     }
 
     private fun inData() {
@@ -90,8 +109,14 @@ class ChiTietActivity : AppCompatActivity() {
         val adapterspin = ArrayAdapter(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,so)
         binding.spinner.adapter = adapterspin
         binding.frameGioHang.setOnClickListener {
-            val i = Intent(this,GioHangActivity::class.java)
-            startActivity(i)
+            if (Utils.isUserLoggedIn == false){
+                binding.badge.setText("0")
+                val i1 = Intent(this,DangNhapActivity::class.java)
+                startActivity(i1)
+            }else{
+                val i = Intent(this,GioHangActivity::class.java)
+                startActivity(i)
+            }
         }
 
         if (Utils.listgiohang != null){
@@ -99,7 +124,11 @@ class ChiTietActivity : AppCompatActivity() {
             for (i in 0 until Utils.listgiohang.size){
                 totalItem = totalItem + Utils.listgiohang.get(i).soluong
             }
-            binding.badge.setText(totalItem.toString())
+            if (Utils.isUserLoggedIn == false){
+                binding.badge.setText("0")
+            }else{
+                binding.badge.setText(totalItem.toString())
+            }
         }
     }
 
@@ -110,7 +139,16 @@ class ChiTietActivity : AppCompatActivity() {
             for (i in 0 until Utils.listgiohang.size){
                 totalItem = totalItem + Utils.listgiohang.get(i).soluong
             }
-            binding.badge.setText(totalItem.toString())
+            if (Utils.isUserLoggedIn == false){
+                binding.badge.setText("0")
+            }else{
+                binding.badge.setText(totalItem.toString())
+            }
         }
+    }
+
+    override fun onDestroy() {
+        compositeDisposable.clear()
+        super.onDestroy()
     }
 }

@@ -1,5 +1,6 @@
 package com.khoa.bookstore.adapter;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -65,7 +66,7 @@ public class SanPhamMoiAdapter extends RecyclerView.Adapter<SanPhamMoiAdapter.My
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView txtSanPham,txtGia;
-        ImageView imgSanPham;
+        ImageView imgSanPham,imgNew;
         private ItemClickListener itemClickListener;
 
         public MyViewHolder(@NonNull View itemView) {
@@ -73,7 +74,16 @@ public class SanPhamMoiAdapter extends RecyclerView.Adapter<SanPhamMoiAdapter.My
             txtSanPham = itemView.findViewById(R.id.item_txtTenSanPham);
             txtGia = itemView.findViewById(R.id.item_txtGiaSanPham);
             imgSanPham = itemView.findViewById(R.id.item_imgSanPhamMoi);
+            imgNew = itemView.findViewById(R.id.imgNew);
             itemView.setOnClickListener(this);
+
+
+            ObjectAnimator animator1 = new ObjectAnimator();
+            animator1 = ObjectAnimator.ofFloat(imgNew,"alpha",1f,0.5f);
+            animator1.setDuration(500);
+            animator1.setRepeatCount(ObjectAnimator.INFINITE);
+            animator1.setRepeatMode(ObjectAnimator.REVERSE);
+            animator1.start();
         }
 
         public void setItemClickListener(ItemClickListener itemClickListener) {

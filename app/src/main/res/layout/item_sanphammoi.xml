@@ -13,11 +13,13 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <ImageView
                 android:id="@+id/item_imgSanPhamMoi"
-                android:src="@drawable/ic_launcher_foreground"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"/>
+                android:layout_height="150dp"
+                android:src="@drawable/ic_launcher_foreground" />
+
             <TextView
                 android:id="@+id/item_txtTenSanPham"
                 android:layout_width="wrap_content"
@@ -39,6 +41,7 @@
 
         </LinearLayout>
         <ImageView
+            android:id="@+id/imgNew"
             android:layout_gravity="top|right"
             android:layout_width="50dp"
             android:src="@drawable/icon_new"

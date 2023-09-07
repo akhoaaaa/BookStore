@@ -23,8 +23,6 @@ class SachActivity : AppCompatActivity() {
     private lateinit var sachAdapter : SachAdapter
     private var listSanPham= mutableListOf<SanPhamMoi?>()
     private lateinit var linearLayoutManager: LinearLayoutManager
-
-    private val page = 1
     var loai: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,11 +51,11 @@ class SachActivity : AppCompatActivity() {
         if (loai == 2){
             binding.tbSach.title = "Truyện"
         }
-        compositeDisposable.add(apiBook.getSach(page,loai)
+        compositeDisposable.add(apiBook.getSach(loai)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ sanPhamMoiModel ->
-                if (sanPhamMoiModel.isSuccess()){
+                if (sanPhamMoiModel.isSuccess){
                     listSanPham = sanPhamMoiModel.result
                     sachAdapter = SachAdapter(this,listSanPham)
                     binding.reSach.adapter = sachAdapter

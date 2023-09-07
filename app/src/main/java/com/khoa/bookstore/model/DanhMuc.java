@@ -1,5 +1,7 @@
 package com.khoa.bookstore.model;
 
+import com.khoa.bookstore.Utils.Utils;
+
 public class DanhMuc {
     int id;
     String tendanhmuc;

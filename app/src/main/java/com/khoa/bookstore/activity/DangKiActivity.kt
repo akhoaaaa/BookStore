@@ -59,9 +59,12 @@ class DangKiActivity : AppCompatActivity() {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({ userModel ->
                         if (userModel.isSuccess) {
+                            Utils.User_current.username = username
+                            Utils.User_current.pass = pass
                             val i = Intent(this, DangNhapActivity::class.java)
                             startActivity(i)
                             Toast.makeText(this,"Thành Công",Toast.LENGTH_SHORT).show()
+                            finish()
                         } else {
                             Toast.makeText(this, userModel.message, Toast.LENGTH_SHORT).show()
                         }

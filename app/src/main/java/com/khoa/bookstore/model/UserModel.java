@@ -5,7 +5,7 @@ import java.util.List;
 public class UserModel {
     boolean success;
     String message;
-    List<user> result;
+    List<User> result;
 
     public boolean isSuccess() {
         return success;
@@ -23,11 +23,11 @@ public class UserModel {
         this.message = message;
     }
 
-    public List<user> getResult() {
+    public List<User> getResult() {
         return result;
     }
 
-    public void setResult(List<user> result) {
+    public void setResult(List<User> result) {
         this.result = result;
     }
 }

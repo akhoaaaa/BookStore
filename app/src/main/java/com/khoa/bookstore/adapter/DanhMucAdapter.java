@@ -1,17 +1,21 @@
 package com.khoa.bookstore.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.khoa.bookstore.R;
+import com.khoa.bookstore.Utils.Utils;
+import com.khoa.bookstore.activity.DangNhapActivity;
 import com.khoa.bookstore.model.DanhMuc;
 
 import java.util.List;
@@ -42,6 +46,7 @@ public class DanhMucAdapter extends BaseAdapter {
     public class ViewHolder{
         TextView txtDanhMuc;
         ImageView imgDanhMuc;
+        LinearLayout layoutLog;
     }
 
     @Override
@@ -53,6 +58,8 @@ public class DanhMucAdapter extends BaseAdapter {
             view = layoutInflater.inflate(R.layout.item_danhmuc, null);
             viewHolder.txtDanhMuc = view.findViewById(R.id.txtDanhMuc);
             viewHolder.imgDanhMuc = view.findViewById(R.id.imgDanhMuc);
+
+
             view.setTag(viewHolder);
         }
         else {

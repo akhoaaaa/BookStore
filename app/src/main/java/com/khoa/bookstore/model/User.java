@@ -1,6 +1,6 @@
 package com.khoa.bookstore.model;
 
-public class user {
+public class User {
     int id;
     String email;
     String pass;

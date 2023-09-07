@@ -30,6 +30,7 @@ import com.khoa.bookstore.databinding.ActivityMainBinding
 import com.khoa.bookstore.model.DanhMuc
 import com.khoa.bookstore.model.SanPhamMoi
 import com.khoa.bookstore.model.SanPhamMoiModel
+import com.khoa.bookstore.model.UserModel
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 
 
@@ -48,6 +49,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         apiBook = RetrofitClient.getInstance(Utils.BASE_URL).create(ApiBookStore::class.java)
+
 
 
         binding.tbTrangChu.apply {
@@ -77,8 +79,14 @@ class MainActivity : AppCompatActivity() {
             binding.badge.setText(totalItem.toString())
         }
         binding.frameGioHang.setOnClickListener {
-            val i = Intent(this,GioHangActivity::class.java)
-            startActivity(i)
+            if (Utils.isUserLoggedIn== false){
+                val i1 = Intent(this,DangNhapActivity::class.java)
+                startActivity(i1)
+            }else{
+                val i = Intent(this,GioHangActivity::class.java)
+                startActivity(i)
+            }
+
         }
     }
 
@@ -88,7 +96,11 @@ class MainActivity : AppCompatActivity() {
         for (i in 0 until Utils.listgiohang.size){
             totalItem = totalItem + Utils.listgiohang.get(i).soluong
         }
-        binding.badge.setText(totalItem.toString())
+        if (Utils.isUserLoggedIn == false){
+            binding.badge.setText("0")
+        }else{
+            binding.badge.setText(totalItem.toString())
+        }
     }
 
     private fun getDanhMuc() {
@@ -108,6 +120,17 @@ class MainActivity : AppCompatActivity() {
                     i2.putExtra("loai",2)
                     startActivity(i2)
                 }
+                4 ->{
+                    if (Utils.isUserLoggedIn == false){
+                        val i = Intent(this,DangNhapActivity::class.java)
+                        startActivity(i)
+                    }else{
+                        Utils.isUserLoggedIn = true
+                        val i4 = Intent (this,ThongTinActivity::class.java)
+                        startActivity(i4)
+                    }
+                }
+
             }
         }
     }

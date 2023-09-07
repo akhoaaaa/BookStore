@@ -42,6 +42,7 @@
                         android:layout_height="35dp"/>
                 </FrameLayout>
 
+
             </androidx.appcompat.widget.Toolbar>
 
             <ViewFlipper
