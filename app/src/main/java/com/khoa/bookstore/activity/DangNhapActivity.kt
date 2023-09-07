@@ -59,6 +59,10 @@ class DangNhapActivity : AppCompatActivity() {
                     ))
             }
         }
+        binding.txtQuenMk.setOnClickListener {
+            val i = Intent(this,ResetPassActivity::class.java)
+            startActivity(i)
+        }
     }
 
     override fun onResume() {

@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:drawableStart="@drawable/user"
+            android:drawableStart="@drawable/email"
             android:drawablePadding="5dp"
             android:hint="Email" />
 

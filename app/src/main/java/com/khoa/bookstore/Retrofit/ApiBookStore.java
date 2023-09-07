@@ -43,4 +43,10 @@ public interface ApiBookStore {
             @Field("pass") String pass
     );
 
+    @POST("resetpass.php")
+    @FormUrlEncoded
+    Observable<UserModel> repass(
+            @Field("email") String email
+    );
+
 }
