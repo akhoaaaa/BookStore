@@ -3,6 +3,7 @@ package com.khoa.bookstore.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Patterns
 import android.widget.Toast
 import com.khoa.bookstore.R
 import com.khoa.bookstore.Retrofit.ApiBookStore
@@ -36,6 +37,9 @@ class DangNhapActivity : AppCompatActivity() {
         binding.btnDangNhap.setOnClickListener {
             val email = binding.txtEmail.text.toString().trim()
             val pass = binding.txtPass.text.toString().trim()
+            if (isValidEmail(email)){
+                Toast.makeText(this,"Vui lòng nhập đúng địa chỉ email",Toast.LENGTH_SHORT).show()
+            }
             if (email.isEmpty()){
                 Toast.makeText(this,"Bạn chưa nhập email",Toast.LENGTH_SHORT).show()
             }else if (pass.isEmpty()){
@@ -71,6 +75,9 @@ class DangNhapActivity : AppCompatActivity() {
             binding.txtEmail.setText(Utils.User_current.username)
             binding.txtPass.setText(Utils.User_current.pass)
         }
+    }
+    fun isValidEmail(email: String):Boolean{
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
     override fun onDestroy() {

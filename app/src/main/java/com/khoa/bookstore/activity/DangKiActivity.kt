@@ -3,7 +3,9 @@ package com.khoa.bookstore.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.ContactsContract.CommonDataKinds.Email
 import android.text.TextUtils
+import android.util.Patterns
 import android.widget.Toast
 import com.khoa.bookstore.R
 import com.khoa.bookstore.Retrofit.ApiBookStore
@@ -13,6 +15,7 @@ import com.khoa.bookstore.databinding.ActivityDangKiBinding
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
+import java.util.regex.Pattern
 
 class DangKiActivity : AppCompatActivity() {
     private lateinit var binding:ActivityDangKiBinding
@@ -39,8 +42,16 @@ class DangKiActivity : AppCompatActivity() {
         val email = binding.txtEmail.text.toString().trim()
         val pass = binding.txtPass.text.toString().trim()
         val repass = binding.txtRePass.text.toString().trim()
-        val sdt = binding.txtEmail.text.toString().trim()
+        val sdt = binding.txtSdt.text.toString().trim()
         val username = binding.txtUserName.text.toString().trim()
+        if (!isValidEmail(email)){
+            Toast.makeText(this, "Địa chỉ email không hợp lệ", Toast.LENGTH_SHORT).show()
+            return
+        }
+        if (!isValidPhoneNumber(sdt)){
+            Toast.makeText(this, "Số điện thoại không hợp lệ", Toast.LENGTH_SHORT).show()
+            return
+        }
         if (TextUtils.isEmpty(email)){
             Toast.makeText(this,"Bạn chưa nhập email ",Toast.LENGTH_SHORT).show()
         }else if (TextUtils.isEmpty(pass)){
@@ -54,12 +65,12 @@ class DangKiActivity : AppCompatActivity() {
         }else{
             if (pass.equals(repass)) {
                 //post data
-                compositeDisposable.add(apiBookStore.dangki(sdt, pass, email, username)
+                compositeDisposable.add(apiBookStore.dangki(email, pass, sdt, username)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({ userModel ->
                         if (userModel.isSuccess) {
-                            Utils.User_current.username = username
+                            Utils.User_current.email = email
                             Utils.User_current.pass = pass
                             val i = Intent(this, DangNhapActivity::class.java)
                             startActivity(i)
@@ -80,6 +91,14 @@ class DangKiActivity : AppCompatActivity() {
                 Toast.makeText(this,"Hãy nhập lại trùng với mật khẩu đã đặt",Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    fun isValidEmail(email: String):Boolean{
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
+    fun isValidPhoneNumber(phoneNumber: String): Boolean {
+        val phonePattern = "^(0\\d{9,10}|\\+\\d{1,3}\\d{8,9})$"
+        return Pattern.matches(phonePattern, phoneNumber)
     }
 
     override fun onDestroy() {
