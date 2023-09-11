@@ -37,9 +37,7 @@ class DangNhapActivity : AppCompatActivity() {
         binding.btnDangNhap.setOnClickListener {
             val email = binding.txtEmail.text.toString().trim()
             val pass = binding.txtPass.text.toString().trim()
-            if (isValidEmail(email)){
-                Toast.makeText(this,"Vui lòng nhập đúng địa chỉ email",Toast.LENGTH_SHORT).show()
-            }
+
             if (email.isEmpty()){
                 Toast.makeText(this,"Bạn chưa nhập email",Toast.LENGTH_SHORT).show()
             }else if (pass.isEmpty()){
@@ -55,6 +53,11 @@ class DangNhapActivity : AppCompatActivity() {
                             val i = Intent(this,MainActivity::class.java)
                             startActivity(i)
                             finish()
+                        }else if (!isValidEmail(email)){
+                            Toast.makeText(this,"Vui lòng nhập đúng định dạng mail ",Toast.LENGTH_SHORT).show()
+                        }
+                        else{
+                            Toast.makeText(this,"Tài khoản hoặc mật khẩu không chính xác vui lòng kiểm tra",Toast.LENGTH_SHORT).show()
                         }
                     },{e ->
                         Toast.makeText(this, e.message,Toast.LENGTH_SHORT).show()
@@ -71,7 +74,7 @@ class DangNhapActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (Utils.User_current.username != null && Utils.User_current.pass != null){
+        if (Utils.User_current.email != null && Utils.User_current.pass != null){
             binding.txtEmail.setText(Utils.User_current.username)
             binding.txtPass.setText(Utils.User_current.pass)
         }

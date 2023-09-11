@@ -1,74 +1,111 @@
-package com.khoa.bookstore.activity
+    package com.khoa.bookstore.activity
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.view.View
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.LayoutManager
-import com.khoa.bookstore.R
-import com.khoa.bookstore.Utils.Utils
-import com.khoa.bookstore.adapter.GioHangAdapter
-import com.khoa.bookstore.databinding.ActivityGioHangBinding
-import com.khoa.bookstore.model.EventBus.TinhTongEvent
-import com.khoa.bookstore.model.GioHang
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
-import java.text.DecimalFormat
+    import android.content.Intent
+    import androidx.appcompat.app.AppCompatActivity
+    import android.os.Bundle
+    import android.view.View
+    import android.widget.Toast
+    import androidx.appcompat.app.AlertDialog
+    import androidx.recyclerview.widget.LinearLayoutManager
+    import androidx.recyclerview.widget.RecyclerView
+    import androidx.recyclerview.widget.RecyclerView.LayoutManager
+    import com.khoa.bookstore.R
+    import com.khoa.bookstore.Retrofit.ApiBookStore
+    import com.khoa.bookstore.Retrofit.RetrofitClient
+    import com.khoa.bookstore.Utils.Utils
+    import com.khoa.bookstore.adapter.GioHangAdapter
+    import com.khoa.bookstore.databinding.ActivityGioHangBinding
+    import com.khoa.bookstore.model.EventBus.TinhTongEvent
+    import com.khoa.bookstore.model.GioHang
+    import com.khoa.bookstore.model.SanPhamMoi
+    import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+    import io.reactivex.rxjava3.disposables.CompositeDisposable
+    import io.reactivex.rxjava3.schedulers.Schedulers
+    import org.greenrobot.eventbus.EventBus
+    import org.greenrobot.eventbus.Subscribe
+    import org.greenrobot.eventbus.ThreadMode
+    import java.text.DecimalFormat
 
-class GioHangActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityGioHangBinding
-    private lateinit var gioHangAdapter: GioHangAdapter
-    private lateinit var gioHangList: List<GioHang>
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityGioHangBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    class GioHangActivity : AppCompatActivity() {
+        private lateinit var binding: ActivityGioHangBinding
+        private lateinit var gioHangAdapter: GioHangAdapter
+        private lateinit var gioHangList: List<GioHang>
+        private var sanPhamMoi = SanPhamMoi()
+        private lateinit var apiBookStore: ApiBookStore
+        private var compositeDisposable = CompositeDisposable()
+        private var tongtiensp:Double = 0.0
 
-        binding.tbGioHang.title = "Giỏ Hàng"
-        binding.tbGioHang.apply {
-            setSupportActionBar(binding.tbGioHang)
-            supportActionBar?.setDisplayHomeAsUpEnabled(true)
-            setNavigationOnClickListener {
-                finish()
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            binding = ActivityGioHangBinding.inflate(layoutInflater)
+            setContentView(binding.root)
+
+
+            apiBookStore = RetrofitClient.getInstance(Utils.BASE_URL).create(ApiBookStore::class.java)
+            compositeDisposable.add(apiBookStore.getSanPham()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ sanPhamMoiModel ->
+                    // Cập nhật sanPhamMoi.soluong từ dữ liệu API
+                    sanPhamMoi.soluong = sanPhamMoiModel.result.size
+                }, { e ->
+                    // Xử lý lỗi khi gọi API nếu cần thiết
+                    Toast.makeText(this, "Lỗi khi gọi API: " + e.message, Toast.LENGTH_SHORT).show()
+                }))
+
+            binding.tbGioHang.title = "Giỏ Hàng"
+            binding.tbGioHang.apply {
+                setSupportActionBar(binding.tbGioHang)
+                supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                setNavigationOnClickListener {
+                    finish()
+                }
+            }
+            binding.reGioHang.setHasFixedSize(true)
+            binding.reGioHang.layoutManager = LinearLayoutManager(this)
+            if (Utils.listgiohang.size == 0) {
+                binding.txtGioHangTrong.visibility = View.VISIBLE
+            } else {
+                gioHangAdapter = GioHangAdapter(applicationContext, Utils.listgiohang)
+                binding.reGioHang.adapter = gioHangAdapter
+                binding.txtGioHangTrong.visibility = View.GONE
+            }
+            tinhTongTien()
+            Event()
+        }
+
+        private fun Event() {
+            binding.btnMuaHang.setOnClickListener {
+                    val i = Intent(this, ThanhToanActivity::class.java)
+                    i.putExtra("tongtien", tongtiensp)
+                    startActivity(i)
             }
         }
-        binding.reGioHang.setHasFixedSize(true)
-        binding.reGioHang.layoutManager = LinearLayoutManager(this)
-        if (Utils.listgiohang.size == 0) {
-            binding.txtGioHangTrong.visibility = View.VISIBLE
-        } else {
-            gioHangAdapter = GioHangAdapter(applicationContext, Utils.listgiohang)
-            binding.reGioHang.adapter = gioHangAdapter
-            binding.txtGioHangTrong.visibility = View.GONE
+
+
+        private fun tinhTongTien() {
+            tongtiensp = 0.0
+            for (i in 0 until Utils.listgiohang.size){
+                tongtiensp += (Utils.listgiohang[i].giasp * Utils.listgiohang[i].soluong)
+            }
+            val decimalFormat = DecimalFormat("###,###,###")
+            binding.txtTongTien.text = decimalFormat.format(tongtiensp)
         }
-        tinhTongTien()
-    }
 
-    private fun tinhTongTien() {
-        var tongtiensp:Double = 0.0
-        for (i in 0 until Utils.listgiohang.size){
-            tongtiensp = tongtiensp + (Utils.listgiohang[i].giasp * Utils.listgiohang[i].soluong)
+        override fun onStart() {
+            super.onStart()
+            //register evenbus
+            EventBus.getDefault().register(this)
         }
-        val decimalFormat = DecimalFormat("###,###,###")
-        binding.txtTongTien.text = decimalFormat.format(tongtiensp)
-    }
 
-    override fun onStart() {
-        super.onStart()
-        //register evenbus
-        EventBus.getDefault().register(this)
-    }
-
-    override fun onStop() {
-        EventBus.getDefault().unregister(this)
-        super.onStop()
-    }
-    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    fun eventTinhTong(event:TinhTongEvent){
-        if (event != null){
-            tinhTongTien()
+        override fun onStop() {
+            EventBus.getDefault().unregister(this)
+            super.onStop()
+        }
+        @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+        fun eventTinhTong(event:TinhTongEvent){
+            if (event != null){
+                tinhTongTien()
+            }
         }
     }
-}

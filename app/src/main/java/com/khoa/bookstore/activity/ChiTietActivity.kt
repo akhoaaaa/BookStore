@@ -4,6 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ArrayAdapter
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.bumptech.glide.Glide
 import com.khoa.bookstore.Retrofit.ApiBookStore
 import com.khoa.bookstore.Retrofit.RetrofitClient
@@ -29,6 +31,7 @@ class ChiTietActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         apiBookStore = RetrofitClient.getInstance(Utils.BASE_URL).create(ApiBookStore::class.java)
+
         binding.tbChiTiet.apply {
             title = "Chi tiết sản phẩm"
             setSupportActionBar(this)
@@ -48,7 +51,9 @@ class ChiTietActivity : AppCompatActivity() {
                 val i = Intent(this,DangNhapActivity::class.java)
                 startActivity(i)
             }else{
-                themGioHang()
+
+                val soluong = binding.spinner.selectedItem.toString().toInt()
+                KiemTraSoLuong(soluong)
             }
         }
     }
@@ -59,14 +64,12 @@ class ChiTietActivity : AppCompatActivity() {
             val soluong:Int = binding.spinner.selectedItem.toString().toInt()
             for (i in 0 until Utils.listgiohang.size){
                 if (Utils.listgiohang[i].id == sanPhamMoi.id){
-                    Utils.listgiohang[i].soluong = soluong + Utils.listgiohang.get(i).soluong
-                    val giasp = sanPhamMoi.giasp * Utils.listgiohang.get(i).soluong
-                    Utils.listgiohang[i].giasp = giasp
+                    Utils.listgiohang[i].soluong = soluong + Utils.listgiohang[i].soluong
                     flag = true
                 }
             }
             if (!flag){
-                val giasp = sanPhamMoi.giasp * soluong
+                val giasp = sanPhamMoi.giasp
                 val gioHang:GioHang = GioHang()
                 gioHang.giasp = giasp
                 gioHang.soluong = soluong
@@ -78,7 +81,7 @@ class ChiTietActivity : AppCompatActivity() {
 
         }else{
             val soluong:Int = binding.spinner.selectedItem.toString().toInt()
-            val giasp = sanPhamMoi.giasp * soluong
+            val giasp = sanPhamMoi.giasp
             val gioHang:GioHang = GioHang()
             gioHang.giasp = giasp
             gioHang.soluong = soluong
@@ -89,7 +92,7 @@ class ChiTietActivity : AppCompatActivity() {
         }
         var totalItem = 0
         for (i in 0 until Utils.listgiohang.size){
-            totalItem = totalItem + Utils.listgiohang.get(i).soluong
+            totalItem += Utils.listgiohang[i].soluong
         }
         if (Utils.isUserLoggedIn == false){
             binding.badge.setText("0")
@@ -100,11 +103,16 @@ class ChiTietActivity : AppCompatActivity() {
 
     private fun inData() {
         sanPhamMoi = intent.getSerializableExtra("chitiet") as SanPhamMoi
-        binding.txtTenSp.setText(sanPhamMoi.tensp)
-        binding.txtMoTaChiTiet.setText(sanPhamMoi.mota)
+        binding.txtTenSp.text = sanPhamMoi.tensp
+        binding.txtMoTaChiTiet.text = sanPhamMoi.mota
+        binding.txtSoLuong.text = "Số lượng: " + sanPhamMoi.soluong.toString().toInt()
+        if (sanPhamMoi.soluong.toString().toInt() == 0){
+            binding.txtSoLuong.text = "Hết Hàng"
+            binding.btnThemVaoGioHang.isEnabled = false
+        }
         Glide.with(applicationContext).load(sanPhamMoi.hinhanh).into(binding.imgGioHang)
         val decimalFormat:DecimalFormat = DecimalFormat("###,###,###")
-        binding.txtGiaSp.setText("Giá: "+decimalFormat.format(sanPhamMoi.giasp)+"Đ")
+        binding.txtGiaSp.text = "Giá: "+decimalFormat.format(sanPhamMoi.giasp)+"Đ"
         val so = listOf<Int>(1,2,3,4,5,6,7,8,9,10)
         val adapterspin = ArrayAdapter(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,so)
         binding.spinner.adapter = adapterspin
@@ -122,7 +130,7 @@ class ChiTietActivity : AppCompatActivity() {
         if (Utils.listgiohang != null){
             var totalItem = 0
             for (i in 0 until Utils.listgiohang.size){
-                totalItem = totalItem + Utils.listgiohang.get(i).soluong
+                totalItem += Utils.listgiohang.get(i).soluong
             }
             if (Utils.isUserLoggedIn == false){
                 binding.badge.setText("0")
@@ -132,12 +140,39 @@ class ChiTietActivity : AppCompatActivity() {
         }
     }
 
+    private fun KiemTraSoLuong(soluong:Int){
+        compositeDisposable.add(apiBookStore.sanPham
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe( {sanPhamMoiModel ->
+                if (sanPhamMoi.soluong >= soluong) {
+                    themGioHang()
+                }else
+                        {
+                        val builder = AlertDialog.Builder(this)
+                        builder.setTitle("Thông Báo")
+                        builder.setMessage("Sản phẩm không đủ số lượng.")
+                        builder.setPositiveButton("OK") { dialog, _ ->
+                            dialog.dismiss()
+                        }
+                        val alertDialog = builder.create()
+                        alertDialog.show()
+                        }
+                }
+            ,{e ->
+                Toast.makeText(this,e.message,Toast.LENGTH_SHORT).show()
+            }
+
+            ))
+
+    }
+
     override fun onResume() {
         super.onResume()
         if (Utils.listgiohang != null){
             var totalItem = 0
             for (i in 0 until Utils.listgiohang.size){
-                totalItem = totalItem + Utils.listgiohang.get(i).soluong
+                totalItem += Utils.listgiohang.get(i).soluong
             }
             if (Utils.isUserLoggedIn == false){
                 binding.badge.setText("0")

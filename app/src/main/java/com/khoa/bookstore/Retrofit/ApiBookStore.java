@@ -49,4 +49,16 @@ public interface ApiBookStore {
             @Field("email") String email
     );
 
+    @POST("donhang.php")
+    @FormUrlEncoded
+    Observable<UserModel> createOrder(
+            @Field("email") String email,
+            @Field("sdt") String sdt,
+            @Field("tongtien") double tongtien,
+            @Field("iduser") int iduser,
+            @Field("diachi") String diachi,
+            @Field("soluong") int soluong,
+            @Field("chitiet") String chitiet
+
+    );
 }
