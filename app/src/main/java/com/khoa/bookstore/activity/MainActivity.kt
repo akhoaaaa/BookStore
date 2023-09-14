@@ -120,6 +120,10 @@ class MainActivity : AppCompatActivity() {
                     i2.putExtra("loai",2)
                     startActivity(i2)
                 }
+                3->{
+                    val i3 = Intent(this,XemDonActivity::class.java)
+                    startActivity(i3)
+                }
                 4 ->{
                     if (Utils.isUserLoggedIn == false){
                         val i = Intent(this,DangNhapActivity::class.java)

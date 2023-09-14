@@ -1,6 +1,8 @@
 package com.khoa.bookstore.Retrofit;
 
 import com.khoa.bookstore.model.DanhMucModel;
+import com.khoa.bookstore.model.DonHang;
+import com.khoa.bookstore.model.DonHangModel;
 import com.khoa.bookstore.model.SanPhamMoiModel;
 import com.khoa.bookstore.model.UserModel;
 
@@ -60,5 +62,10 @@ public interface ApiBookStore {
             @Field("soluong") int soluong,
             @Field("chitiet") String chitiet
 
+    );
+    @POST("xemdonhang.php")
+    @FormUrlEncoded
+    Observable<DonHangModel> xemDonHang(
+            @Field("iduser") int id
     );
 }

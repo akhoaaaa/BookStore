@@ -21,7 +21,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 import java.text.DecimalFormat
 
 class ChiTietActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityChiTietBinding
+    private lateinit var binding:ActivityChiTietBinding
     private lateinit var sanPhamMoi:SanPhamMoi
     private lateinit var apiBookStore: ApiBookStore
     private val compositeDisposable = CompositeDisposable()
