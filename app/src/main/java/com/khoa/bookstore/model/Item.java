@@ -4,6 +4,24 @@ public class Item {
     int idsp;
     String tensp;
     int soluong;
+    double gia;
+    String hinhanh;
+
+    public String getHinhanh() {
+        return hinhanh;
+    }
+
+    public void setHinhanh(String hinhanh) {
+        this.hinhanh = hinhanh;
+    }
+
+    public double getGia() {
+        return gia;
+    }
+
+    public void setGia(double gia) {
+        this.gia = gia;
+    }
 
     public int getIdsp() {
         return idsp;
