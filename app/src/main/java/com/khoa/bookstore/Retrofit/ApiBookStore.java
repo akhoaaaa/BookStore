@@ -3,6 +3,7 @@ package com.khoa.bookstore.Retrofit;
 import com.khoa.bookstore.model.DanhMucModel;
 import com.khoa.bookstore.model.DonHang;
 import com.khoa.bookstore.model.DonHangModel;
+import com.khoa.bookstore.model.SanPhamMoi;
 import com.khoa.bookstore.model.SanPhamMoiModel;
 import com.khoa.bookstore.model.UserModel;
 
@@ -67,5 +68,10 @@ public interface ApiBookStore {
     @FormUrlEncoded
     Observable<DonHangModel> xemDonHang(
             @Field("iduser") int id
+    );
+    @POST("timkiem.php")
+    @FormUrlEncoded
+    Observable<SanPhamMoiModel> search(
+            @Field("search") String search
     );
 }

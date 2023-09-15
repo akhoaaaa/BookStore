@@ -53,6 +53,7 @@ class MainActivity : AppCompatActivity() {
 
 
         binding.tbTrangChu.apply {
+            title = "Trang chủ"
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
             setNavigationIcon(android.R.drawable.ic_menu_sort_by_size)
             setNavigationOnClickListener {
@@ -86,7 +87,10 @@ class MainActivity : AppCompatActivity() {
                 val i = Intent(this,GioHangActivity::class.java)
                 startActivity(i)
             }
-
+        }
+        binding.imgSearch.setOnClickListener {
+            val i2 = Intent(this,SearchActivity::class.java)
+            startActivity(i2)
         }
     }
 
