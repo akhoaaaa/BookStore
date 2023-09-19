@@ -4,7 +4,7 @@ public class Item {
     int idsp;
     String tensp;
     int soluong;
-    double gia;
+    double giasp;
     String hinhanh;
 
     public String getHinhanh() {
@@ -16,11 +16,11 @@ public class Item {
     }
 
     public double getGia() {
-        return gia;
+        return giasp;
     }
 
     public void setGia(double gia) {
-        this.gia = gia;
+        this.giasp = gia;
     }
 
     public int getIdsp() {

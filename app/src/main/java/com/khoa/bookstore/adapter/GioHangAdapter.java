@@ -52,12 +52,17 @@
             Glide.with(context).load(gioHang.getHinhanh()).into(holder.item_giohang_img);
             DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
             holder.item_giohang_giasp.setText(decimalFormat.format(gioHang.getGiasp()));
+            holder.soluongtonkho.setText("Số lượng còn lại: "+gioHang.getSoluongtonkho());
             holder.item_giohang_giasp2.setText(decimalFormat.format(gioHang.getSoluong() * gioHang.getGiasp()));
             holder.setListenner(new IImageClickListenner() {
                 @Override
                 public void onImageClick(@Nullable View view, int pos, int giatri) {
                     if (giatri == 1 ){
                         if (gioHangList.get(pos).getSoluong()>1){
+                            if (gioHangList.get(pos).getSoluongtonkho() <gioHangList.get(pos).getSoluong()){
+                                int soluongmoi = gioHang.getSoluongtonkho();
+                                gioHangList.get(pos).setSoluong(soluongmoi);
+                            }
                             int soluongmoi = gioHangList.get(pos).getSoluong()-1;
                             gioHangList.get(pos).setSoluong(soluongmoi);
                             holder.item_giohang_soluong.setText(gioHangList.get(pos).getSoluong() + " ");
@@ -86,8 +91,11 @@
 
                         }
                     }else if (giatri == 2){
-                        if (gioHangList.get(pos).getSoluong() < 11){
+                        if (gioHangList.get(pos).getSoluong() < gioHangList.get(pos).getSoluongtonkho()){
                             int soluongmoi = gioHangList.get(pos).getSoluong()+1;
+                            gioHangList.get(pos).setSoluong(soluongmoi);
+                        }else if (gioHangList.get(pos).getSoluongtonkho() <gioHangList.get(pos).getSoluong()){
+                            int soluongmoi = gioHang.getSoluongtonkho();
                             gioHangList.get(pos).setSoluong(soluongmoi);
                         }
                         holder.item_giohang_soluong.setText(gioHangList.get(pos).getSoluong() + " ");
@@ -107,10 +115,11 @@
 
         public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
             ImageView item_giohang_img,item_giohang_cong,item_giohang_tru;
-            TextView item_giohang_tensp,item_giohang_giasp,item_giohang_giasp2,item_giohang_soluong,soluong;
+            TextView item_giohang_tensp,item_giohang_giasp,item_giohang_giasp2,item_giohang_soluong,soluongtonkho;
             IImageClickListenner listenner;
             public MyViewHolder(@NonNull View itemView) {
                 super(itemView);
+                soluongtonkho = itemView.findViewById(R.id.item_giohang_soluongtonkho);
                 item_giohang_img = itemView.findViewById(R.id.item_giohang_img);
                 item_giohang_tensp = itemView.findViewById(R.id.item_giohang_tensp);
                 item_giohang_giasp = itemView.findViewById(R.id.item_giohang_giasp);

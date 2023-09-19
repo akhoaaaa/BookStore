@@ -25,6 +25,7 @@ class ChiTietActivity : AppCompatActivity() {
     private lateinit var sanPhamMoi:SanPhamMoi
     private lateinit var apiBookStore: ApiBookStore
     private val compositeDisposable = CompositeDisposable()
+    var soluong:Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityChiTietBinding.inflate(layoutInflater)
@@ -51,7 +52,6 @@ class ChiTietActivity : AppCompatActivity() {
                 val i = Intent(this,DangNhapActivity::class.java)
                 startActivity(i)
             }else{
-
                 val soluong = binding.spinner.selectedItem.toString().toInt()
                 KiemTraSoLuong(soluong)
             }
@@ -61,7 +61,7 @@ class ChiTietActivity : AppCompatActivity() {
     private fun themGioHang() {
         if (Utils.listgiohang.size > 0){
             var flag = false
-            val soluong:Int = binding.spinner.selectedItem.toString().toInt()
+            soluong = binding.spinner.selectedItem.toString().toInt()
             for (i in 0 until Utils.listgiohang.size){
                 if (Utils.listgiohang[i].id == sanPhamMoi.id){
                     Utils.listgiohang[i].soluong = soluong + Utils.listgiohang[i].soluong
@@ -76,6 +76,7 @@ class ChiTietActivity : AppCompatActivity() {
                 gioHang.id = sanPhamMoi.id
                 gioHang.tensp = sanPhamMoi.tensp
                 gioHang.hinhanh = sanPhamMoi.hinhanh
+                gioHang.soluongtonkho = sanPhamMoi.soluongtonkho
                 Utils.listgiohang.add(gioHang)
             }
 
@@ -88,6 +89,7 @@ class ChiTietActivity : AppCompatActivity() {
             gioHang.id = sanPhamMoi.id
             gioHang.tensp = sanPhamMoi.tensp
             gioHang.hinhanh = sanPhamMoi.hinhanh
+            gioHang.soluongtonkho = sanPhamMoi.soluongtonkho
             Utils.listgiohang.add(gioHang)
         }
         var totalItem = 0
@@ -97,6 +99,9 @@ class ChiTietActivity : AppCompatActivity() {
         if (Utils.isUserLoggedIn == false){
             binding.badge.setText("0")
         }else{
+            if(totalItem>sanPhamMoi.soluongtonkho){
+                binding.badge.setText(sanPhamMoi.soluongtonkho.toString().trim())
+            }
             binding.badge.setText(totalItem.toString())
         }
     }
@@ -105,15 +110,18 @@ class ChiTietActivity : AppCompatActivity() {
         sanPhamMoi = intent.getSerializableExtra("chitiet") as SanPhamMoi
         binding.txtTenSp.text = sanPhamMoi.tensp
         binding.txtMoTaChiTiet.text = sanPhamMoi.mota
-        binding.txtSoLuong.text = "Số lượng: " + sanPhamMoi.soluong.toString().toInt()
-        if (sanPhamMoi.soluong.toString().toInt() == 0){
+        binding.txtSoLuong.text = "Số lượng: " + sanPhamMoi.soluongtonkho.toString().toInt()
+        if (sanPhamMoi.soluongtonkho.toString().toInt() == 0){
             binding.txtSoLuong.text = "Hết Hàng"
             binding.btnThemVaoGioHang.isEnabled = false
         }
         Glide.with(applicationContext).load(sanPhamMoi.hinhanh).into(binding.imgGioHang)
         val decimalFormat:DecimalFormat = DecimalFormat("###,###,###")
         binding.txtGiaSp.text = "Giá: "+decimalFormat.format(sanPhamMoi.giasp)+"Đ"
-        val so = listOf<Int>(1,2,3,4,5,6,7,8,9,10)
+        val so = mutableListOf<Int>()
+        for (i in 1 until sanPhamMoi.soluongtonkho+1 ){
+            so.add(i)
+        }
         val adapterspin = ArrayAdapter(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,so)
         binding.spinner.adapter = adapterspin
         binding.frameGioHang.setOnClickListener {
@@ -141,11 +149,12 @@ class ChiTietActivity : AppCompatActivity() {
     }
 
     private fun KiemTraSoLuong(soluong:Int){
+
         compositeDisposable.add(apiBookStore.sanPham
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe( {sanPhamMoiModel ->
-                if (sanPhamMoi.soluong >= soluong) {
+                if (soluong <= sanPhamMoi.soluongtonkho) {
                     themGioHang()
                 }else
                         {

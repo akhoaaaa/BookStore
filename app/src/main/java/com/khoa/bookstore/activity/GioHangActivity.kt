@@ -48,6 +48,9 @@
                 .subscribe({ sanPhamMoiModel ->
                     // Cập nhật sanPhamMoi.soluong từ dữ liệu API
                     sanPhamMoi.soluong = sanPhamMoiModel.result.size
+                    if(sanPhamMoi.soluongtonkho<= sanPhamMoi.soluong){
+
+                    }
                 }, { e ->
                     // Xử lý lỗi khi gọi API nếu cần thiết
                     Toast.makeText(this, "Lỗi khi gọi API: " + e.message, Toast.LENGTH_SHORT).show()
@@ -75,10 +78,14 @@
         }
 
         private fun Event() {
+            if (sanPhamMoi.soluong>sanPhamMoi.soluongtonkho){
+                binding.btnMuaHang.visibility = View.GONE
+            }
             binding.btnMuaHang.setOnClickListener {
-                    val i = Intent(this, ThanhToanActivity::class.java)
-                    i.putExtra("tongtien", tongtiensp)
-                    startActivity(i)
+
+                val i = Intent(this, ThanhToanActivity::class.java)
+                i.putExtra("tongtien", tongtiensp)
+                startActivity(i)
             }
         }
 

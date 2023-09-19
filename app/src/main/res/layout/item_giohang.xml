@@ -41,6 +41,16 @@
                     android:text="150000"
                     android:textColor="@color/red"
                     android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/item_giohang_soluongtonkho"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="35dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="5dp"
+                    android:text="Số lượng trong kho: "
+                    android:textColor="@color/red"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 

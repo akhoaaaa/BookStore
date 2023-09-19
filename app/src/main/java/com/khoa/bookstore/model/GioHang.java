@@ -6,6 +6,15 @@ public class GioHang {
     double giasp;
     String hinhanh;
     int soluong;
+    int soluongtonkho;
+
+    public int getSoluongtonkho() {
+        return soluongtonkho;
+    }
+
+    public void setSoluongtonkho(int soluongtonkho) {
+        this.soluongtonkho = soluongtonkho;
+    }
 
     public GioHang(){
     }
