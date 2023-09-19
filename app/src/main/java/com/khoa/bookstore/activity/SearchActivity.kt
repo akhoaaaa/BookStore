@@ -66,6 +66,9 @@ class SearchActivity : AppCompatActivity() {
                     sanPhamMoiList = sanPhamMoiModel.result
                     sachAdapter = SachAdapter(this,sanPhamMoiList)
                     binding.reTimKiem.adapter = sachAdapter
+                }else{
+                    sanPhamMoiList.clear()
+                    sachAdapter.notifyDataSetChanged()
                 }
 
             },{e->

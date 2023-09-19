@@ -7,6 +7,8 @@
     import android.view.LayoutInflater;
     import android.view.View;
     import android.view.ViewGroup;
+    import android.widget.CheckBox;
+    import android.widget.CompoundButton;
     import android.widget.ImageView;
     import android.widget.TextView;
 
@@ -52,8 +54,27 @@
             Glide.with(context).load(gioHang.getHinhanh()).into(holder.item_giohang_img);
             DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
             holder.item_giohang_giasp.setText(decimalFormat.format(gioHang.getGiasp()));
-            holder.soluongtonkho.setText("Số lượng còn lại: "+gioHang.getSoluongtonkho());
+            holder.soluongtonkho.setText("Còn lại: "+gioHang.getSoluongtonkho());
             holder.item_giohang_giasp2.setText(decimalFormat.format(gioHang.getSoluong() * gioHang.getGiasp()));
+            holder.item_giohang_check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if (b){
+                        Utils.listmuahang.add(gioHang);
+                        EventBus.getDefault().postSticky(new TinhTongEvent());
+                    }else {
+                        for (int i=0;i<Utils.listmuahang.size();i++){
+                            if (Utils.listmuahang.get(i).getId() == gioHang.getId()){
+                                Utils.listmuahang.remove(i);
+                                EventBus.getDefault().postSticky(new TinhTongEvent());
+                            }
+                        }
+                    }
+                }
+            });
+
+
+
             holder.setListenner(new IImageClickListenner() {
                 @Override
                 public void onImageClick(@Nullable View view, int pos, int giatri) {
@@ -117,6 +138,7 @@
             ImageView item_giohang_img,item_giohang_cong,item_giohang_tru;
             TextView item_giohang_tensp,item_giohang_giasp,item_giohang_giasp2,item_giohang_soluong,soluongtonkho;
             IImageClickListenner listenner;
+            CheckBox item_giohang_check;
             public MyViewHolder(@NonNull View itemView) {
                 super(itemView);
                 soluongtonkho = itemView.findViewById(R.id.item_giohang_soluongtonkho);
@@ -129,6 +151,7 @@
                 item_giohang_tru = itemView.findViewById(R.id.item_giohang_tru);
                 item_giohang_cong.setOnClickListener(this);
                 item_giohang_tru.setOnClickListener(this);
+                item_giohang_check = itemView.findViewById(R.id.item_giohang_check);
             }
 
             public void setListenner(IImageClickListenner listenner) {

@@ -9,6 +9,11 @@
     android:layout_width="match_parent"
     android:orientation="horizontal"
     android:layout_height="match_parent">
+        <CheckBox
+            android:layout_gravity="center"
+            android:id="@+id/item_giohang_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
         <ImageView
             android:id="@+id/item_giohang_img"
         android:src="@drawable/icon_new"
@@ -48,7 +53,7 @@
                     android:layout_marginLeft="35dp"
                     android:layout_marginRight="5dp"
                     android:layout_marginTop="5dp"
-                    android:text="Số lượng trong kho: "
+                    android:text="Còn lại: 20 "
                     android:textColor="@color/red"
                     android:textStyle="bold" />
 
@@ -91,7 +96,7 @@
                     android:textColor="@color/black"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Tổng tiền sản phẩm: "/>
+                    android:text="Thành tiền: "/>
                 <TextView
                 android:layout_marginTop="5dp"
                 android:id="@+id/item_giohang_giasp2"

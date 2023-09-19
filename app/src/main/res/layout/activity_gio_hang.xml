@@ -9,7 +9,6 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/tbGioHang"
-
         android:background="@color/backgroupTB"
         app:title="Giỏ Hàng"
         android:layout_width="match_parent"

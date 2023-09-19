@@ -25,9 +25,11 @@ class ThongTinActivity : AppCompatActivity() {
         }
         binding.btnDangXuat.setOnClickListener {
             Utils.isUserLoggedIn = false
-            val i = Intent(this,MainActivity::class.java)
+            val i = Intent(this,SplashActivity::class.java)
             startActivity(i)
         }
+
+        binding.txtUsername.text = "Xin chào: " + Utils.User_current.username
     }
 
     override fun onDestroy() {

@@ -55,8 +55,8 @@ class ThanhToanActivity : AppCompatActivity() {
 
     private fun Item() {
         totalItem = 0
-        for (i in 0 until Utils.listgiohang.size){
-            totalItem += Utils.listgiohang[i].soluong
+        for (i in 0 until Utils.listmuahang.size){
+            totalItem += Utils.listmuahang[i].soluong
 
         }
     }
@@ -74,8 +74,8 @@ class ThanhToanActivity : AppCompatActivity() {
                     val email = Utils.User_current.email
                     val sdt = Utils.User_current.sdt
                     val id = Utils.User_current.id
-                    Log.d("Test", Gson().toJson(Utils.listgiohang))
-                    compositeDisposable.add(apiBookStore.createOrder(email,sdt,tongtien,id,diachi,totalItem,Gson().toJson(Utils.listgiohang))
+                    Log.d("Test", Gson().toJson(Utils.listmuahang)) // kiểm tra
+                    compositeDisposable.add(apiBookStore.createOrder(email,sdt,tongtien,id,diachi,totalItem,Gson().toJson(Utils.listmuahang))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe( { userModel ->
@@ -83,7 +83,7 @@ class ThanhToanActivity : AppCompatActivity() {
                                 Toast.makeText(applicationContext, "Thành công", Toast.LENGTH_SHORT).show()
                                 val i = Intent(this, MainActivity::class.java)
                                 startActivity(i)
-                                Utils.listgiohang.clear()
+                                Utils.listmuahang.clear()
                                 finish()
 
                             }

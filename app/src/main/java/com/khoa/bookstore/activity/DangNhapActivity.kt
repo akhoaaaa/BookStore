@@ -75,7 +75,7 @@ class DangNhapActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         if (Utils.User_current.email != null && Utils.User_current.pass != null){
-            binding.txtEmail.setText(Utils.User_current.username)
+            binding.txtEmail.setText(Utils.User_current.email)
             binding.txtPass.setText(Utils.User_current.pass)
         }
     }

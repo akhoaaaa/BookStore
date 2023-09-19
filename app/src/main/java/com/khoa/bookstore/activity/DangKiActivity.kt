@@ -43,7 +43,7 @@ class DangKiActivity : AppCompatActivity() {
         val pass = binding.txtPass.text.toString().trim()
         val repass = binding.txtRePass.text.toString().trim()
         val sdt = binding.txtSdt.text.toString().trim()
-        val username = binding.txtUserName.text.toString().trim()
+        val username = binding.txtUserName.text.toString().trim().uppercase()
         if (!isValidEmail(email)){
             Toast.makeText(this, "Địa chỉ email không hợp lệ", Toast.LENGTH_SHORT).show()
             return
@@ -104,6 +104,5 @@ class DangKiActivity : AppCompatActivity() {
     override fun onDestroy() {
         compositeDisposable.clear()
         super.onDestroy()
-
     }
 }

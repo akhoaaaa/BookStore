@@ -9,11 +9,22 @@
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:title="Thông Tin"
+        app:title="Thông Tin Người Dùng"
         android:id="@+id/tbThongtin"
         android:background="@color/backgroupTB">
-
     </androidx.appcompat.widget.Toolbar>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:id="@+id/txtUsername"
+        android:textColor="@color/black"
+        android:text="Xin chào: Khoa"/>
+
     <Button
         android:id="@+id/btnDangXuat"
         android:layout_marginTop="600dp"

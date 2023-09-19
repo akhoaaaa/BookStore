@@ -40,22 +40,6 @@
             binding = ActivityGioHangBinding.inflate(layoutInflater)
             setContentView(binding.root)
 
-
-            apiBookStore = RetrofitClient.getInstance(Utils.BASE_URL).create(ApiBookStore::class.java)
-            compositeDisposable.add(apiBookStore.getSanPham()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ sanPhamMoiModel ->
-                    // Cập nhật sanPhamMoi.soluong từ dữ liệu API
-                    sanPhamMoi.soluong = sanPhamMoiModel.result.size
-                    if(sanPhamMoi.soluongtonkho<= sanPhamMoi.soluong){
-
-                    }
-                }, { e ->
-                    // Xử lý lỗi khi gọi API nếu cần thiết
-                    Toast.makeText(this, "Lỗi khi gọi API: " + e.message, Toast.LENGTH_SHORT).show()
-                }))
-
             binding.tbGioHang.title = "Giỏ Hàng"
             binding.tbGioHang.apply {
                 setSupportActionBar(binding.tbGioHang)
@@ -73,8 +57,11 @@
                 binding.reGioHang.adapter = gioHangAdapter
                 binding.txtGioHangTrong.visibility = View.GONE
             }
-            tinhTongTien()
             Event()
+            if (Utils.listmuahang != null){
+                Utils.listmuahang.clear()
+            }
+            tinhTongTien()
         }
 
         private fun Event() {
@@ -85,6 +72,7 @@
 
                 val i = Intent(this, ThanhToanActivity::class.java)
                 i.putExtra("tongtien", tongtiensp)
+                Utils.listgiohang.clear()
                 startActivity(i)
             }
         }
@@ -92,8 +80,8 @@
 
         private fun tinhTongTien() {
             tongtiensp = 0.0
-            for (i in 0 until Utils.listgiohang.size){
-                tongtiensp += (Utils.listgiohang[i].giasp * Utils.listgiohang[i].soluong)
+            for (i in 0 until Utils.listmuahang.size){
+                tongtiensp += (Utils.listmuahang[i].giasp * Utils.listmuahang[i].soluong)
             }
             val decimalFormat = DecimalFormat("###,###,###")
             binding.txtTongTien.text = decimalFormat.format(tongtiensp)
